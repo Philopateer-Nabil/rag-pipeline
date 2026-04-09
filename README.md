@@ -26,7 +26,7 @@ graph TD
     R --> M
     M -->|Re-rank| N[Cross-Encoder<br/>ms-marco-MiniLM]
     N -->|Top-K| O[Ranked Chunks]
-    O -->|Context| P[Ollama LLM<br/>llama3 / mistral]
+    O -->|Context| P[LLM Backend<br/>Ollama / HuggingFace]
     P --> Q[Generated Answer]
 
     S[Metrics Collector] -.->|Latency & Tokens| O
@@ -48,7 +48,7 @@ graph TD
 - **FAISS vector store**: Disk-persisted index with save/load support
 - **Triple retrieval**: Similarity search, MMR for diversity, and hybrid (dense + BM25 with RRF)
 - **Cross-encoder re-ranking**: ms-marco-MiniLM-L-6-v2 for precision improvement
-- **Local LLM generation**: Ollama backend supporting llama3 and mistral
+- **Local LLM generation**: Ollama (llama3, mistral) or HuggingFace (flan-t5) — no paid APIs
 - **RAGAS-style evaluation**: Faithfulness, answer relevancy, context precision
 - **Observability**: Per-stage latency tracking, token estimation, `/metrics` endpoint
 - **Streamlit chat UI**: Interactive chat interface with source highlighting and live metrics
@@ -83,7 +83,7 @@ generation:
 ### Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Philopateer-Nabil/rag-pipeline.git
 cd rag-pipeline
 
 # Install the package
@@ -267,7 +267,7 @@ rag-pipeline/
 │   ├── retrieval.py            # Similarity, MMR, and hybrid search
 │   ├── hybrid_retrieval.py     # BM25 + dense retrieval with RRF fusion
 │   ├── reranker.py             # Cross-encoder re-ranking
-│   ├── generation.py           # Ollama LLM generation
+│   ├── generation.py           # LLM generation (Ollama + HuggingFace)
 │   ├── pipeline.py             # End-to-end orchestration
 │   ├── metrics.py              # Observability: latency, tokens, counters
 │   ├── ui.py                   # Streamlit chat interface
