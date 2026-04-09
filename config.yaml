@@ -1,0 +1,49 @@
+# RAG Pipeline Configuration
+# All settings can be overridden via environment variables prefixed with RAG_
+# e.g., RAG_CHUNK_SIZE=1000 overrides chunking.chunk_size
+
+chunking:
+  strategy: "recursive"  # "fixed" or "recursive"
+  chunk_size: 512
+  chunk_overlap: 64
+  separators:
+    - "\n\n"
+    - "\n"
+    - ". "
+    - " "
+    - ""
+
+embedding:
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  device: "cpu"
+
+vectorstore:
+  index_path: "./data/faiss_index"
+  distance_metric: "cosine"
+
+retrieval:
+  strategy: "mmr"  # "similarity", "mmr", or "hybrid" (dense + BM25 with RRF)
+  top_k: 5
+  mmr_lambda: 0.5
+  score_threshold: 0.0
+  rrf_k: 60  # RRF constant for hybrid search
+
+reranker:
+  enabled: true
+  model_name: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  top_k: 3
+
+generation:
+  llm_backend: "huggingface"  # "ollama" or "huggingface" (local, no API needed)
+  model_name: "google/flan-t5-small"  # For ollama: "llama3" or "mistral"
+  base_url: "http://localhost:11434"  # Only used for ollama backend
+  temperature: 0.1
+  max_tokens: 256
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+
+logging:
+  level: "INFO"
+  format: "console"  # "console" or "json"
